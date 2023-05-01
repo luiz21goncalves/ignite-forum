@@ -10,13 +10,13 @@ const fakeAnswersRepository: AnswersRepository = {
 test('create an answer', async () => {
   const sut = new AnswerQuestionUseCase(fakeAnswersRepository)
 
-  const answer = await sut.execute({
+  const { answer } = await sut.execute({
     content: 'Nova resposta',
     instructorId: '1',
     questionId: '2',
   })
 
   expect(answer.content).toEqual('Nova resposta')
-  expect(answer.authorId).toEqual('1')
-  expect(answer.questionId).toEqual('2')
+  expect(answer.authorId.toValue()).toEqual('1')
+  expect(answer.questionId.toValue()).toEqual('2')
 })
