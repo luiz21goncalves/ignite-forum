@@ -9,7 +9,7 @@
       "groups": [
         "/^node:/",
         "module",
-        "/^@\//",
+        ["/^@\//", "/^@test\//"],
         ["parent", "sibling", "index"]
       ],
       "alphabetize": { "order": "asc", "ignoreCase": true }
