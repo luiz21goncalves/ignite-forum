@@ -6,7 +6,7 @@ import { Optional } from '@/core/types/optional'
 
 import { Slug } from './value-objects/slug'
 
-type QuestionProps = {
+export type QuestionProps = {
   title: string
   content: string
   slug: Slug
