@@ -14,7 +14,7 @@ type CreateQuestionUseCaseResponse = {
 }
 
 export class CreateQuestionUseCase {
-  constructor(public readonly questionsRepository: QuestionsRepository) {}
+  constructor(private readonly questionsRepository: QuestionsRepository) {}
 
   public async execute({
     authorId,
