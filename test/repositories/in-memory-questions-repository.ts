@@ -8,13 +8,33 @@ export class InMemoryQuestionsRepository implements QuestionsRepository {
     this.items = []
   }
 
-  async create(question: Question): Promise<void> {
+  public async create(question: Question): Promise<void> {
     this.items.push(question)
   }
 
-  async findBySlug(slug: string): Promise<Question | null> {
+  public async delete(question: Question): Promise<void> {
+    const questionIndex = this.items.findIndex(
+      (findQuestion) => findQuestion.id.toString() === question.id.toString(),
+    )
+
+    this.items.splice(questionIndex, 1)
+  }
+
+  public async findBySlug(slug: string): Promise<Question | null> {
     const question = this.items.find(
       (findQuestion) => findQuestion.slug.value === slug,
+    )
+
+    if (!question) {
+      return null
+    }
+
+    return question
+  }
+
+  async findById(id: string): Promise<Question | null> {
+    const question = this.items.find(
+      (findQuestion) => findQuestion.id.toString() === id,
     )
 
     if (!question) {
