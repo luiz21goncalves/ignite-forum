@@ -8,7 +8,9 @@
   "scripts": {
     "test": "vitest run",
     "test:cov": "vitest run --coverage",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint": "eslint src --ext .ts,.js",
+    "lint:fix": "eslint src --ext .ts,.js --fix"
   },
   "devDependencies": {
     "@commitlint/cli": "17.6.1",
