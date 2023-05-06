@@ -1,8 +1,12 @@
 export class Slug {
   public readonly value: string
 
-  constructor(value: string) {
+  protected constructor(value: string) {
     this.value = value
+  }
+
+  public static create(value: string) {
+    return new Slug(value)
   }
 
   /**
