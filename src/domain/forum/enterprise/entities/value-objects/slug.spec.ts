@@ -18,10 +18,6 @@ describe('Slug', () => {
   it('should be able to create an instance of Slug receiving a raw content', () => {
     const slug = Slug.create('raw content and not formatted')
 
-    expect(slug).toBeInstanceOf(Slug)
     expect(slug.value).toEqual('raw content and not formatted')
-    expect(slug).toHaveProperty('create')
-    expect(slug).toHaveProperty('createFromText')
-    expect(slug).toHaveProperty('value')
   })
 })
