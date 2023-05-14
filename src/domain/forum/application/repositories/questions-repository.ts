@@ -1,3 +1,5 @@
+import { PaginationParams } from '@/core/repositories/pagination-params'
+
 import { Question } from '../../enterprise/entities/question'
 
 export type QuestionsRepository = {
@@ -6,4 +8,5 @@ export type QuestionsRepository = {
   save(question: Question): Promise<void>
   findBySlug(slug: string): Promise<Question | null>
   findById(id: string): Promise<Question | null>
+  findManyRecent(params: PaginationParams): Promise<Question[]>
 }

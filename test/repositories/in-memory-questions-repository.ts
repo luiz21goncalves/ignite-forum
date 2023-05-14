@@ -1,3 +1,5 @@
+import { PAGE } from '@/core/constants/page'
+import { PaginationParams } from '@/core/repositories/pagination-params'
 import { QuestionsRepository } from '@/domain/forum/application/repositories/questions-repository'
 import { Question } from '@/domain/forum/enterprise/entities/question'
 
@@ -40,7 +42,7 @@ export class InMemoryQuestionsRepository implements QuestionsRepository {
     return question
   }
 
-  async findById(id: string): Promise<Question | null> {
+  public async findById(id: string): Promise<Question | null> {
     const question = this.items.find(
       (findQuestion) => findQuestion.id.toString() === id,
     )
@@ -50,5 +52,19 @@ export class InMemoryQuestionsRepository implements QuestionsRepository {
     }
 
     return question
+  }
+
+  public async findManyRecent({ page }: PaginationParams): Promise<Question[]> {
+    const questions = this.items
+      .sort(
+        (questionA, questionB) =>
+          questionB.createdAt.getTime() - questionA.createdAt.getTime(),
+      )
+      .slice(
+        (page - 1) * PAGE.DEFAULT_AMOUNT_OF_ITEMS,
+        page * PAGE.DEFAULT_AMOUNT_OF_ITEMS,
+      )
+
+    return questions
   }
 }
