@@ -58,4 +58,15 @@ describe('Edit Question', () => {
       }),
     ).rejects.toStrictEqual(new Error('Not allowed.'))
   })
+
+  it('should not be able to edit a question non existing', async () => {
+    await expect(() =>
+      sut.execute({
+        questionId: 'question-1',
+        authorId: 'author-2',
+        content: 'new content',
+        title: 'title',
+      }),
+    ).rejects.toStrictEqual(new Error('Question not found.'))
+  })
 })

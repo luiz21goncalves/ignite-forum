@@ -16,7 +16,7 @@ describe('Edit Answer', () => {
     sut = new EditAnswerUseCase(inMemoryAnswersRepository)
   })
 
-  it('should be able to edit a answer', async () => {
+  it('should be able to edit an answer', async () => {
     const newAnswer = makeAnswer(
       {
         authorId: new UniqueEntityID('author-1'),
@@ -35,7 +35,7 @@ describe('Edit Answer', () => {
     expect(answer).toMatchObject({ content: 'Conteúdo test' })
   })
 
-  it('should not be able to edit a answer from another user', async () => {
+  it('should not be able to edit an answer from another user', async () => {
     const newAnswer = makeAnswer(
       {
         authorId: new UniqueEntityID('author-1'),
@@ -52,5 +52,15 @@ describe('Edit Answer', () => {
         content: 'Conteúdo test',
       }),
     ).rejects.toStrictEqual(new Error('Not allowed.'))
+  })
+
+  it('should not be able to edit an answer non existing', async () => {
+    await expect(() =>
+      sut.execute({
+        answerId: 'answer-1',
+        authorId: 'author-2',
+        content: 'new content',
+      }),
+    ).rejects.toStrictEqual(new Error('Answer not found.'))
   })
 })

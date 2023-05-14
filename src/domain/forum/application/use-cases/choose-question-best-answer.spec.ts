@@ -54,4 +54,28 @@ describe('Choose Question Best Answer', () => {
       }),
     ).rejects.toStrictEqual(new Error('Not allowed.'))
   })
+
+  it('should not be able to choose the best answer non existing an answer', async () => {
+    await expect(
+      sut.execute({
+        answerId: 'answer-1',
+        authorId: 'author-1',
+      }),
+    ).rejects.toStrictEqual(new Error('Answer not found.'))
+  })
+
+  it('should not be able to choose the best answer non existing a question', async () => {
+    const newAnswer = makeAnswer({
+      authorId: new UniqueEntityID('author-1'),
+    })
+
+    await inMemoryAnswersRepository.create(newAnswer)
+
+    await expect(
+      sut.execute({
+        answerId: newAnswer.id.toString(),
+        authorId: 'author-1',
+      }),
+    ).rejects.toStrictEqual(new Error('Question not found.'))
+  })
 })

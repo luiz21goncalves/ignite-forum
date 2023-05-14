@@ -55,4 +55,13 @@ describe('Delete Question', () => {
       }),
     ).rejects.toStrictEqual(new Error('Not allowed.'))
   })
+
+  it('should not be able to delete a question non existing', async () => {
+    await expect(() =>
+      sut.execute({
+        questionId: 'question-1',
+        authorId: 'author-2',
+      }),
+    ).rejects.toStrictEqual(new Error('Question not found.'))
+  })
 })

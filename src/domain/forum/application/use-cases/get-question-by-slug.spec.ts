@@ -29,4 +29,12 @@ describe('Get Question By Slug', () => {
 
     expect(question).toStrictEqual(newQuestion)
   })
+
+  it('should not be able to get a question by slug non existing', async () => {
+    await expect(() =>
+      sut.execute({
+        slug: 'non-existing',
+      }),
+    ).rejects.toStrictEqual(new Error('Question not found.'))
+  })
 })

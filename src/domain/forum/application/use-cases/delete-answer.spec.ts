@@ -16,7 +16,7 @@ describe('Delete Answer', () => {
     sut = new DeleteAnswerUseCase(inMemoryAnswersRepository)
   })
 
-  it('should be able to delete a answer', async () => {
+  it('should be able to delete an answer', async () => {
     const newAnswer = makeAnswer(
       {
         authorId: new UniqueEntityID('author-1'),
@@ -36,7 +36,7 @@ describe('Delete Answer', () => {
     expect(findAnswer).toBeNull()
   })
 
-  it('should not be able to delete a answer from another user', async () => {
+  it('should not be able to delete an answer from another user', async () => {
     const newAnswer = makeAnswer(
       {
         authorId: new UniqueEntityID('author-1'),
@@ -52,5 +52,14 @@ describe('Delete Answer', () => {
         authorId: 'author-2',
       }),
     ).rejects.toStrictEqual(new Error('Not allowed.'))
+  })
+
+  it('should not be able to delete an answer non existing', async () => {
+    await expect(() =>
+      sut.execute({
+        answerId: 'answer-1',
+        authorId: 'author-2',
+      }),
+    ).rejects.toStrictEqual(new Error('Answer not found.'))
   })
 })
