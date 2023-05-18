@@ -15,7 +15,7 @@
   "devDependencies": {
     "@commitlint/cli": "17.6.3",
     "@commitlint/config-conventional": "17.6.3",
-    "@faker-js/faker": "8.0.0",
+    "@faker-js/faker": "8.0.1",
     "@rocketseat/eslint-config": "1.2.0",
     "@types/node": "18.16.13",
     "@vitest/coverage-c8": "0.31.0",
