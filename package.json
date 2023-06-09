@@ -12,6 +12,9 @@
     "lint": "eslint src --ext .ts,.js",
     "lint:fix": "eslint src --ext .ts,.js --fix"
   },
+  "dependencies": {
+    "dayjs": "1.11.8"
+  },
   "devDependencies": {
     "@commitlint/cli": "17.6.5",
     "@commitlint/config-conventional": "17.6.5",
@@ -25,8 +28,5 @@
     "typescript": "5.0.4",
     "vite-tsconfig-paths": "4.2.0",
     "vitest": "0.32.0"
-  },
-  "dependencies": {
-    "dayjs": "1.11.7"
   }
 }
