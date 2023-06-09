@@ -3,16 +3,16 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { makeQuestion } from '@test/factories/make-question'
 import { InMemoryQuestionsRepository } from '@test/repositories/in-memory-questions-repository'
 
-import { FetchResentQuestions } from './fetch-recent-questions'
+import { FetchResentQuestionsUseCase } from './fetch-recent-questions'
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository
-let sut: FetchResentQuestions
+let sut: FetchResentQuestionsUseCase
 
 describe('Fetch Resent Questions', () => {
   beforeEach(() => {
     inMemoryQuestionsRepository = new InMemoryQuestionsRepository()
 
-    sut = new FetchResentQuestions(inMemoryQuestionsRepository)
+    sut = new FetchResentQuestionsUseCase(inMemoryQuestionsRepository)
   })
 
   it('should be able to fetch recent questions', async () => {

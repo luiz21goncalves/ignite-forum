@@ -11,7 +11,7 @@ type ChooseQuestionBestAnswerResponse = {
   question: Question
 }
 
-export class ChooseQuestionBestAnswer {
+export class ChooseQuestionBestAnswerUseCase {
   constructor(
     private readonly questionsRepository: QuestionsRepository,
     private readonly answersRepository: AnswersRepository,

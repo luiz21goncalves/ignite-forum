@@ -6,18 +6,18 @@ import { makeQuestion } from '@test/factories/make-question'
 import { InMemoryAnswersRepository } from '@test/repositories/in-memory-answers-repository'
 import { InMemoryQuestionsRepository } from '@test/repositories/in-memory-questions-repository'
 
-import { ChooseQuestionBestAnswer } from './choose-question-best-answer'
+import { ChooseQuestionBestAnswerUseCase } from './choose-question-best-answer'
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository
 let inMemoryAnswersRepository: InMemoryAnswersRepository
-let sut: ChooseQuestionBestAnswer
+let sut: ChooseQuestionBestAnswerUseCase
 
 describe('Choose Question Best Answer', () => {
   beforeEach(() => {
     inMemoryQuestionsRepository = new InMemoryQuestionsRepository()
     inMemoryAnswersRepository = new InMemoryAnswersRepository()
 
-    sut = new ChooseQuestionBestAnswer(
+    sut = new ChooseQuestionBestAnswerUseCase(
       inMemoryQuestionsRepository,
       inMemoryAnswersRepository,
     )

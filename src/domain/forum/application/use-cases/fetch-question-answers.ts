@@ -10,7 +10,7 @@ type FetchQuestionAnswersResponse = {
   answers: Answer[]
 }
 
-export class FetchQuestionAnswers {
+export class FetchQuestionAnswersUseCase {
   constructor(private readonly answersRepository: AnswersRepository) {}
 
   public async execute({

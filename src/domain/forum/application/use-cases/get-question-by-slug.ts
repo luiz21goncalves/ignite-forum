@@ -9,7 +9,7 @@ type GetQuestionBySlugResponse = {
   question: Question
 }
 
-export class GetQuestionBySlug {
+export class GetQuestionBySlugUseCase {
   constructor(private readonly questionsRepository: QuestionsRepository) {}
 
   public async execute({
