@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [tsconfigPaths()],
   test: {
     coverage: {
-      provider: 'c8',
+      provider: 'v8',
       reporter: ['lcov', 'text', 'text-summary'],
     },
   },
