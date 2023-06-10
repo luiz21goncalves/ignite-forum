@@ -4,7 +4,10 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { makeQuestion } from '@test/factories/make-question'
 import { InMemoryQuestionsRepository } from '@test/repositories/in-memory-questions-repository'
 
+import { Question } from '../../enterprise/entities/question'
 import { EditQuestionUseCase } from './edit-question'
+import { NotAllowedError } from './errors/not-allowed-error'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository
 let sut: EditQuestionUseCase
@@ -26,13 +29,16 @@ describe('Edit Question', () => {
 
     await inMemoryQuestionsRepository.create(newQuestion)
 
-    const { question } = await sut.execute({
+    const result = await sut.execute({
       questionId: 'question-1',
       authorId: 'author-1',
       title: 'Pergunta Test',
       content: 'Conteúdo test',
     })
 
+    const { question } = result.value as { question: Question }
+
+    expect(result.isRight()).toBe(true)
     expect(question).toMatchObject({
       title: 'Pergunta Test',
       content: 'Conteúdo test',
@@ -49,24 +55,26 @@ describe('Edit Question', () => {
 
     await inMemoryQuestionsRepository.create(newQuestion)
 
-    await expect(() =>
-      sut.execute({
-        questionId: 'question-1',
-        authorId: 'author-2',
-        title: 'Pergunta Test',
-        content: 'Conteúdo test',
-      }),
-    ).rejects.toStrictEqual(new Error('Not allowed.'))
+    const result = await sut.execute({
+      questionId: 'question-1',
+      authorId: 'author-2',
+      title: 'Pergunta Test',
+      content: 'Conteúdo test',
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(NotAllowedError)
   })
 
   it('should not be able to edit a question non existing', async () => {
-    await expect(() =>
-      sut.execute({
-        questionId: 'question-1',
-        authorId: 'author-2',
-        content: 'new content',
-        title: 'title',
-      }),
-    ).rejects.toStrictEqual(new Error('Question not found.'))
+    const result = await sut.execute({
+      questionId: 'question-1',
+      authorId: 'author-2',
+      content: 'new content',
+      title: 'title',
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(ResourceNotFoundError)
   })
 })

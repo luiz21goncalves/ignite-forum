@@ -3,7 +3,9 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { makeQuestion } from '@test/factories/make-question'
 import { InMemoryQuestionsRepository } from '@test/repositories/in-memory-questions-repository'
 
+import { Question } from '../../enterprise/entities/question'
 import { Slug } from '../../enterprise/entities/value-objects/slug'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { GetQuestionBySlugUseCase } from './get-question-by-slug'
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository
@@ -23,18 +25,21 @@ describe('Get Question By Slug', () => {
 
     await inMemoryQuestionsRepository.create(newQuestion)
 
-    const { question } = await sut.execute({
+    const result = await sut.execute({
       slug: 'example-question',
     })
+
+    const { question } = result.value as { question: Question }
 
     expect(question).toStrictEqual(newQuestion)
   })
 
   it('should not be able to get a question by slug non existing', async () => {
-    await expect(() =>
-      sut.execute({
-        slug: 'non-existing',
-      }),
-    ).rejects.toStrictEqual(new Error('Question not found.'))
+    const result = await sut.execute({
+      slug: 'non-existing',
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(ResourceNotFoundError)
   })
 })

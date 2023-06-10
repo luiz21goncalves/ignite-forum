@@ -15,15 +15,16 @@ describe('Answer Question', () => {
   })
 
   it('should be able to create an answer', async () => {
-    const { answer } = await sut.execute({
+    const result = await sut.execute({
       content: 'Nova resposta',
       instructorId: '1',
       questionId: '2',
     })
 
-    expect(answer.id).toBeTruthy()
-    expect(answer.content).toEqual('Nova resposta')
-    expect(answer.authorId.toValue()).toEqual('1')
-    expect(answer.questionId.toValue()).toEqual('2')
+    expect(result.isRight()).toBe(true)
+    expect(result.value?.answer.id).toBeTruthy()
+    expect(result.value?.answer.content).toEqual('Nova resposta')
+    expect(result.value?.answer.authorId.toValue()).toEqual('1')
+    expect(result.value?.answer.questionId.toValue()).toEqual('2')
   })
 })

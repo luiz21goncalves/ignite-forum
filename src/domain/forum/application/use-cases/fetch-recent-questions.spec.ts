@@ -34,9 +34,9 @@ describe('Fetch Resent Questions', () => {
       ),
     ])
 
-    const { questions } = await sut.execute({ page: 1 })
+    const result = await sut.execute({ page: 1 })
 
-    expect(questions).toStrictEqual([
+    expect(result.value?.questions).toStrictEqual([
       expect.objectContaining({ createdAt: new Date(2023, 4, 15) }),
       expect.objectContaining({ createdAt: new Date(2023, 4, 10) }),
       expect.objectContaining({ createdAt: new Date(2023, 4, 5) }),
@@ -52,8 +52,8 @@ describe('Fetch Resent Questions', () => {
 
     await Promise.all(promises)
 
-    const { questions } = await sut.execute({ page: 2 })
+    const result = await sut.execute({ page: 2 })
 
-    expect(questions).toHaveLength(5)
+    expect(result.value?.questions).toHaveLength(5)
   })
 })

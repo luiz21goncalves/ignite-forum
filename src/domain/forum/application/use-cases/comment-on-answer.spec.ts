@@ -5,7 +5,9 @@ import { makeAnswer } from '@test/factories/make-answer'
 import { InMemoryAnswerCommentsRepository } from '@test/repositories/in-memory-answer-comments-repository'
 import { InMemoryAnswersRepository } from '@test/repositories/in-memory-answers-repository'
 
+import { AnswerComment } from '../../enterprise/entities/answer-comment'
 import { CommentOnAnswerUseCase } from './comment-on-answer'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 let inMemoryAnswersRepository: InMemoryAnswersRepository
 let inMemoryAnswerCommentsRepository: InMemoryAnswerCommentsRepository
@@ -27,12 +29,15 @@ describe('Comment on Answer', () => {
     const content = faker.lorem.text()
 
     await inMemoryAnswersRepository.create(newAnswer)
-    const { answerComment } = await sut.execute({
+    const result = await sut.execute({
       authorId: newAnswer.authorId.toString(),
       answerId: newAnswer.id.toString(),
       content,
     })
 
+    const { answerComment } = result.value as { answerComment: AnswerComment }
+
+    expect(result.isRight()).toBe(true)
     expect(answerComment.authorId.toString()).toStrictEqual(
       newAnswer.authorId.toString(),
     )
@@ -45,12 +50,13 @@ describe('Comment on Answer', () => {
   it('should not be able to comment on a non-existing answer', async () => {
     const content = faker.lorem.text()
 
-    await expect(
-      sut.execute({
-        authorId: 'author-1',
-        answerId: 'non-existing-answer',
-        content,
-      }),
-    ).rejects.toStrictEqual(new Error('Answer not found.'))
+    const result = await sut.execute({
+      authorId: 'author-1',
+      answerId: 'non-existing-answer',
+      content,
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(ResourceNotFoundError)
   })
 })

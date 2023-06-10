@@ -5,6 +5,8 @@ import { makeQuestion } from '@test/factories/make-question'
 import { InMemoryQuestionsRepository } from '@test/repositories/in-memory-questions-repository'
 
 import { DeleteQuestionUseCase } from './delete-question'
+import { NotAllowedError } from './errors/not-allowed-error'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository
 let sut: DeleteQuestionUseCase
@@ -26,7 +28,7 @@ describe('Delete Question', () => {
 
     await inMemoryQuestionsRepository.create(newQuestion)
 
-    await sut.execute({
+    const result = await sut.execute({
       questionId: 'question-1',
       authorId: 'author-1',
     })
@@ -35,6 +37,7 @@ describe('Delete Question', () => {
       'question-1',
     )
 
+    expect(result.isRight()).toBe(true)
     expect(findQuestion).toBeNull()
   })
 
@@ -48,20 +51,22 @@ describe('Delete Question', () => {
 
     await inMemoryQuestionsRepository.create(newQuestion)
 
-    await expect(() =>
-      sut.execute({
-        questionId: 'question-1',
-        authorId: 'author-2',
-      }),
-    ).rejects.toStrictEqual(new Error('Not allowed.'))
+    const result = await sut.execute({
+      questionId: 'question-1',
+      authorId: 'author-2',
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(NotAllowedError)
   })
 
   it('should not be able to delete a question non existing', async () => {
-    await expect(() =>
-      sut.execute({
-        questionId: 'question-1',
-        authorId: 'author-2',
-      }),
-    ).rejects.toStrictEqual(new Error('Question not found.'))
+    const result = await sut.execute({
+      questionId: 'question-1',
+      authorId: 'author-2',
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(ResourceNotFoundError)
   })
 })

@@ -4,7 +4,10 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { makeAnswer } from '@test/factories/make-answer'
 import { InMemoryAnswersRepository } from '@test/repositories/in-memory-answers-repository'
 
+import { Answer } from '../../enterprise/entities/answer'
 import { EditAnswerUseCase } from './edit-answer'
+import { NotAllowedError } from './errors/not-allowed-error'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 let inMemoryAnswersRepository: InMemoryAnswersRepository
 let sut: EditAnswerUseCase
@@ -26,12 +29,15 @@ describe('Edit Answer', () => {
 
     await inMemoryAnswersRepository.create(newAnswer)
 
-    const { answer } = await sut.execute({
+    const result = await sut.execute({
       answerId: 'answer-1',
       authorId: 'author-1',
       content: 'Conteúdo test',
     })
 
+    const { answer } = result.value as { answer: Answer }
+
+    expect(result.isRight()).toBe(true)
     expect(answer).toMatchObject({ content: 'Conteúdo test' })
   })
 
@@ -45,22 +51,24 @@ describe('Edit Answer', () => {
 
     await inMemoryAnswersRepository.create(newAnswer)
 
-    await expect(() =>
-      sut.execute({
-        answerId: 'answer-1',
-        authorId: 'author-2',
-        content: 'Conteúdo test',
-      }),
-    ).rejects.toStrictEqual(new Error('Not allowed.'))
+    const result = await sut.execute({
+      answerId: 'answer-1',
+      authorId: 'author-2',
+      content: 'Conteúdo test',
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(NotAllowedError)
   })
 
   it('should not be able to edit an answer non existing', async () => {
-    await expect(() =>
-      sut.execute({
-        answerId: 'answer-1',
-        authorId: 'author-2',
-        content: 'new content',
-      }),
-    ).rejects.toStrictEqual(new Error('Answer not found.'))
+    const result = await sut.execute({
+      answerId: 'answer-1',
+      authorId: 'author-2',
+      content: 'new content',
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(ResourceNotFoundError)
   })
 })

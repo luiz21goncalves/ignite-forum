@@ -5,6 +5,8 @@ import { makeQuestionComment } from '@test/factories/make-question-comment'
 import { InMemoryQuestionCommentsRepository } from '@test/repositories/in-memory-question-comments-repository'
 
 import { DeleteQuestionCommentUseCase } from './delete-question-comment'
+import { NotAllowedError } from './errors/not-allowed-error'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 let inMemoryQuestionCommentsRepository: InMemoryQuestionCommentsRepository
 let sut: DeleteQuestionCommentUseCase
@@ -42,20 +44,22 @@ describe('Delete Question Comment', () => {
 
     await inMemoryQuestionCommentsRepository.create(questionComment)
 
-    await expect(
-      sut.execute({
-        authorId: 'author-2',
-        questionCommentId: questionComment.id.toString(),
-      }),
-    ).rejects.toStrictEqual(new Error('Not allowed.'))
+    const result = await sut.execute({
+      authorId: 'author-2',
+      questionCommentId: questionComment.id.toString(),
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(NotAllowedError)
   })
 
   it('should not be able to delete a non-existing question comment', async () => {
-    await expect(
-      sut.execute({
-        authorId: 'author-2',
-        questionCommentId: 'non-existing-question-comment',
-      }),
-    ).rejects.toStrictEqual(new Error('Question comment not found.'))
+    const result = await sut.execute({
+      authorId: 'author-2',
+      questionCommentId: 'non-existing-question-comment',
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(ResourceNotFoundError)
   })
 })
