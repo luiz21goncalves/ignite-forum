@@ -1,12 +1,15 @@
 import { PAGE } from '@/core/constants/page'
 import { PaginationParams } from '@/core/repositories/pagination-params'
+import { QuestionAttachmentsRepository } from '@/domain/forum/application/repositories/question-attachments-repository'
 import { QuestionsRepository } from '@/domain/forum/application/repositories/questions-repository'
 import { Question } from '@/domain/forum/enterprise/entities/question'
 
 export class InMemoryQuestionsRepository implements QuestionsRepository {
   private items: Question[]
 
-  constructor() {
+  constructor(
+    private readonly questionAttachmentsRepository: QuestionAttachmentsRepository,
+  ) {
     this.items = []
   }
 
@@ -17,6 +20,10 @@ export class InMemoryQuestionsRepository implements QuestionsRepository {
   public async delete(question: Question): Promise<void> {
     const questionIndex = this.items.findIndex(
       (findQuestion) => findQuestion.id.toString() === question.id.toString(),
+    )
+
+    await this.questionAttachmentsRepository.deleteManyByQuestionId(
+      question.id.toString(),
     )
 
     this.items.splice(questionIndex, 1)
