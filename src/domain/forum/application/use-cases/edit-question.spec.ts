@@ -2,6 +2,8 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { makeQuestion } from '@test/factories/make-question'
+import { makeQuestionAttachments } from '@test/factories/make-question-attachments'
+import { InMemoryQuestionAttachmentsRepository } from '@test/repositories/in-memory-question-attachments-repository'
 import { InMemoryQuestionsRepository } from '@test/repositories/in-memory-questions-repository'
 
 import { Question } from '../../enterprise/entities/question'
@@ -10,13 +12,19 @@ import { NotAllowedError } from './errors/not-allowed-error'
 import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository
+let inMemoryQuestionAttachmentsRepository: InMemoryQuestionAttachmentsRepository
 let sut: EditQuestionUseCase
 
 describe('Edit Question', () => {
   beforeEach(() => {
     inMemoryQuestionsRepository = new InMemoryQuestionsRepository()
+    inMemoryQuestionAttachmentsRepository =
+      new InMemoryQuestionAttachmentsRepository()
 
-    sut = new EditQuestionUseCase(inMemoryQuestionsRepository)
+    sut = new EditQuestionUseCase(
+      inMemoryQuestionsRepository,
+      inMemoryQuestionAttachmentsRepository,
+    )
   })
 
   it('should be able to edit a question', async () => {
@@ -29,11 +37,23 @@ describe('Edit Question', () => {
 
     await inMemoryQuestionsRepository.create(newQuestion)
 
+    inMemoryQuestionAttachmentsRepository.items.push(
+      makeQuestionAttachments({
+        questionId: newQuestion.id,
+        attachmentId: new UniqueEntityID('attachment-01'),
+      }),
+      makeQuestionAttachments({
+        questionId: newQuestion.id,
+        attachmentId: new UniqueEntityID('attachment-02'),
+      }),
+    )
+
     const result = await sut.execute({
       questionId: 'question-1',
       authorId: 'author-1',
       title: 'Pergunta Test',
       content: 'Conteúdo test',
+      attachmentsIds: ['attachment-01', 'attachment-03'],
     })
 
     const { question } = result.value as { question: Question }
@@ -43,6 +63,15 @@ describe('Edit Question', () => {
       title: 'Pergunta Test',
       content: 'Conteúdo test',
     })
+    expect(question.attachments.currentItems).toHaveLength(2)
+    expect(question.attachments.currentItems).toEqual([
+      expect.objectContaining({
+        attachmentId: new UniqueEntityID('attachment-01'),
+      }),
+      expect.objectContaining({
+        attachmentId: new UniqueEntityID('attachment-03'),
+      }),
+    ])
   })
 
   it('should not be able to edit a question from another user', async () => {
@@ -60,6 +89,7 @@ describe('Edit Question', () => {
       authorId: 'author-2',
       title: 'Pergunta Test',
       content: 'Conteúdo test',
+      attachmentsIds: [],
     })
 
     expect(result.isLeft()).toBe(true)
@@ -72,6 +102,7 @@ describe('Edit Question', () => {
       authorId: 'author-2',
       content: 'new content',
       title: 'title',
+      attachmentsIds: [],
     })
 
     expect(result.isLeft()).toBe(true)
