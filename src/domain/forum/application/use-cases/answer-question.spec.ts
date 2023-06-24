@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { InMemoryAnswersRepository } from '@test/repositories/in-memory-answers-repository'
 
 import { AnswerQuestionUseCase } from './answer-question'
@@ -19,12 +20,23 @@ describe('Answer Question', () => {
       content: 'Nova resposta',
       instructorId: '1',
       questionId: '2',
+      attachmentsIds: ['attachment-01', 'attachment-02'],
     })
 
+    const answer = await inMemoryAnswersRepository.findById(
+      result.value?.answer.id.toString()!,
+    )
+
     expect(result.isRight()).toBe(true)
-    expect(result.value?.answer.id).toBeTruthy()
-    expect(result.value?.answer.content).toEqual('Nova resposta')
-    expect(result.value?.answer.authorId.toValue()).toEqual('1')
-    expect(result.value?.answer.questionId.toValue()).toEqual('2')
+    expect(result.value?.answer).toStrictEqual(answer)
+    expect(answer?.attachments.compareItems).toHaveLength(2)
+    expect(answer?.attachments.currentItems).toEqual([
+      expect.objectContaining({
+        attachmentId: new UniqueEntityID('attachment-01'),
+      }),
+      expect.objectContaining({
+        attachmentId: new UniqueEntityID('attachment-02'),
+      }),
+    ])
   })
 })
