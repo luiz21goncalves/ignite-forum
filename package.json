@@ -11,7 +11,8 @@
     "test:cov": "vitest run --coverage",
     "prepare": "husky install",
     "lint": "eslint src --ext .ts,.js",
-    "lint:fix": "eslint src --ext .ts,.js --fix"
+    "lint:fix": "eslint src --ext .ts,.js --fix",
+    "types": "tsc --noEmit"
   },
   "dependencies": {
     "dayjs": "1.11.8"
