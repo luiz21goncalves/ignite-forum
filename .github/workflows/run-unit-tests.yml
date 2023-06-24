@@ -28,7 +28,7 @@ jobs:
       - name: Setup Node and install project dependencies
         uses: actions/setup-node@v3
         with:
-          node-version: 18.16.0
+          node-version: 18.16.1
           cache: 'pnpm'
 
         if: steps.pnpm-cache.outputs.cache-hit != 'true'
