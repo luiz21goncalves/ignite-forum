@@ -34,5 +34,7 @@ jobs:
         if: steps.pnpm-cache.outputs.cache-hit != 'true'
       - run: pnpm install --prefer-offline
 
+      - run: pnpm run types
+
       - run: pnpm run test
 
