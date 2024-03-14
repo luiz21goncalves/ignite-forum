@@ -18,8 +18,8 @@
     "dayjs": "1.11.10"
   },
   "devDependencies": {
-    "@commitlint/cli": "18.6.1",
-    "@commitlint/config-conventional": "18.6.2",
+    "@commitlint/cli": "19.0.2",
+    "@commitlint/config-conventional": "19.0.0",
     "@faker-js/faker": "8.4.1",
     "@rocketseat/eslint-config": "2.2.2",
     "@types/node": "20.11.20",
