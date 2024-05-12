@@ -1,6 +1,6 @@
 # DDD (Domain-driven Disign)
 
-Desing dirigido à domínio
+Design dirigido à domínio
 
 ## Domínio
 
