@@ -30,6 +30,7 @@ describe('Create Question', () => {
     })
 
     const question = await inMemoryQuestionsRepository.findById(
+      // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
       result.value?.question.id.toString()!,
     )
 
