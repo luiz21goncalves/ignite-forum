@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { beforeEach, describe, expect, it } from 'vitest'
 
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import { makeQuestion } from '@test/factories/make-question'
 import { InMemoryQuestionAttachmentsRepository } from '@test/repositories/in-memory-question-attachments-repository'
 import { InMemoryQuestionCommentsRepository } from '@test/repositories/in-memory-question-comments-repository'
@@ -8,7 +9,6 @@ import { InMemoryQuestionsRepository } from '@test/repositories/in-memory-questi
 
 import { QuestionComment } from '../../enterprise/entities/question-comment'
 import { CommentOnQuestionUseCase } from './comment-on-question'
-import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository
 let inMemoryQuestionCommentsRepository: InMemoryQuestionCommentsRepository

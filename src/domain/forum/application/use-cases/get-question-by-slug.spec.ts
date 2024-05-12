@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import { makeQuestion } from '@test/factories/make-question'
 import { InMemoryQuestionAttachmentsRepository } from '@test/repositories/in-memory-question-attachments-repository'
 import { InMemoryQuestionsRepository } from '@test/repositories/in-memory-questions-repository'
 
 import { Question } from '../../enterprise/entities/question'
 import { Slug } from '../../enterprise/entities/value-objects/slug'
-import { ResourceNotFoundError } from './errors/resource-not-found-error'
 import { GetQuestionBySlugUseCase } from './get-question-by-slug'
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository

@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { NotAllowedError } from '@/core/errors/not-allowed-error'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 import { makeAnswerComment } from '@test/factories/make-answer-comment'
 import { InMemoryAnswerCommentsRepository } from '@test/repositories/in-memory-answer-comments-repository'
 
 import { DeleteAnswerCommentUseCase } from './delete-answer-comment'
-import { NotAllowedError } from './errors/not-allowed-error'
-import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 let inMemoryAnswerCommentsRepository: InMemoryAnswerCommentsRepository
 let sut: DeleteAnswerCommentUseCase
