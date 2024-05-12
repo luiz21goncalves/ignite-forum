@@ -13,7 +13,7 @@ export class Entity<Props> {
     this.props = props
   }
 
-  public equals(entity: Entity<any>): boolean {
+  public equals(entity: Entity<Props>): boolean {
     if (entity === this) {
       return true
     }

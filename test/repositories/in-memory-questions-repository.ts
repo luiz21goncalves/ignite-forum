@@ -1,4 +1,5 @@
 import { PAGE } from '@/core/constants/page'
+import { DomainEvents } from '@/core/events/domain-events'
 import { PaginationParams } from '@/core/repositories/pagination-params'
 import { QuestionAttachmentsRepository } from '@/domain/forum/application/repositories/question-attachments-repository'
 import { QuestionsRepository } from '@/domain/forum/application/repositories/questions-repository'
@@ -15,6 +16,8 @@ export class InMemoryQuestionsRepository implements QuestionsRepository {
 
   public async create(question: Question): Promise<void> {
     this.items.push(question)
+
+    DomainEvents.dispatchEventsForAggregate(question.id)
   }
 
   public async delete(question: Question): Promise<void> {
@@ -33,6 +36,8 @@ export class InMemoryQuestionsRepository implements QuestionsRepository {
     const questionIndex = this.items.findIndex(
       (findQuestion) => findQuestion.id.toString() === question.id.toString(),
     )
+
+    DomainEvents.dispatchEventsForAggregate(question.id)
 
     this.items[questionIndex] = question
   }
