@@ -11,7 +11,7 @@ type DeleteQuestionUseCaseRequest = {
 
 type DeleteQuestionUseCaseResponse = Either<
   ResourceNotFoundError | NotAllowedError,
-  {}
+  Record<string, never>
 >
 
 export class DeleteQuestionUseCase {

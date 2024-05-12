@@ -51,9 +51,8 @@ describe('Delete Question', () => {
       authorId: 'author-1',
     })
 
-    const findQuestion = await inMemoryQuestionsRepository.findById(
-      'question-1',
-    )
+    const findQuestion =
+      await inMemoryQuestionsRepository.findById('question-1')
 
     expect(result.isRight()).toBe(true)
     expect(findQuestion).toBeNull()

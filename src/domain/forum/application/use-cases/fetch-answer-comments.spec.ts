@@ -36,7 +36,7 @@ describe('Fetch Answer Comments', () => {
 
   it('should be able to fetch paginated answer comments', async () => {
     const answerId = new UniqueEntityID()
-    const promises: Promise<any>[] = []
+    const promises: Promise<unknown>[] = []
 
     for (let index = 1; index <= 25; index++) {
       promises.push(

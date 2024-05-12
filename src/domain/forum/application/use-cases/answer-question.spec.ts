@@ -30,6 +30,7 @@ describe('Answer Question', () => {
     })
 
     const answer = await inMemoryAnswersRepository.findById(
+      // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
       result.value?.answer.id.toString()!,
     )
 

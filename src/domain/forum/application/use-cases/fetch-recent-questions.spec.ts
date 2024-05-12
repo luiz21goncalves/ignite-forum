@@ -50,7 +50,7 @@ describe('Fetch Resent Questions', () => {
   })
 
   it('should be able to fetch paginated recent questions', async () => {
-    const promises: Promise<any>[] = []
+    const promises: Promise<unknown>[] = []
 
     for (let index = 1; index <= 25; index++) {
       promises.push(inMemoryQuestionsRepository.create(makeQuestion()))
