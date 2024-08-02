@@ -15,7 +15,7 @@
     "types": "tsc --noEmit"
   },
   "dependencies": {
-    "dayjs": "1.11.11"
+    "dayjs": "1.11.12"
   },
   "devDependencies": {
     "@commitlint/cli": "19.3.0",
